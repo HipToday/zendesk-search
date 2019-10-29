@@ -41,11 +41,11 @@ public class App {
         System.out.println("Welcome to Zendesk Search!");
 
         List<Organization> organizations =
-            ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
+            ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
         List<Ticket> tickets =
-            ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_TICKETS);
+            ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_TICKETS);
         List<User> users =
-            ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_USERS);
+            ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_USERS);
 
         System.out.println("Organization count: " + organizations.size());
         System.out.println("Ticket count: " + tickets.size());

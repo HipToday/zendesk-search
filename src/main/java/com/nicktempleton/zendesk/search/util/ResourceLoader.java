@@ -22,6 +22,7 @@
 package com.nicktempleton.zendesk.search.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -32,6 +33,7 @@ import java.util.Map;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.nicktempleton.zendesk.search.model.Organization;
 import com.nicktempleton.zendesk.search.model.Ticket;
@@ -50,15 +52,27 @@ public class ResourceLoader {
         RESOURCE_TYPE_MAP.put(RESOURCE_USERS, new TypeToken<List<User>>(){}.getType());
     }
 
-    public static <T> List<T> loadFromJSONResource(String resource) {
+    public static <T> List<T> loadFromJsonResource(String resource) {
+        List<T> data = null;
+
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream(resource);
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        try (
+            InputStream is = classloader.getResourceAsStream(resource);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        ) {
+            Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
 
-        Gson gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create();
+            data = gson.fromJson(br, RESOURCE_TYPE_MAP.get(resource));
+        } catch (NullPointerException npe) {
+            throw new NullPointerException("Unable to open resource: " + resource);
+        } catch (JsonSyntaxException jse) {
+            throw new JsonSyntaxException("Invalid JSON in resource: " + resource, jse);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
 
-        return gson.fromJson(br, RESOURCE_TYPE_MAP.get(resource));
+        return data;
     }
 }
