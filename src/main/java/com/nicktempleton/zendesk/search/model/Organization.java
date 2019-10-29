@@ -31,21 +31,21 @@ import com.google.gson.annotations.SerializedName;
  * Organization model object.
  */
 public class Organization {
-    @SerializedName("_id") private String id;
+    @SerializedName("_id") private Integer id;
     private URL url;
     private UUID externalId;
     private String name;
     private List<String> domainNames;
     private String createdAt;
     private String details;
-    private boolean sharedTickets;
+    private Boolean sharedTickets;
     private List<String> tags;
 
-    public String getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -97,15 +97,15 @@ public class Organization {
         this.details = details;
     }
 
-    public boolean isSharedTickets() {
+    public Boolean isSharedTickets() {
         return this.sharedTickets;
     }
 
-    public boolean getSharedTickets() {
+    public Boolean getSharedTickets() {
         return this.sharedTickets;
     }
 
-    public void setSharedTickets(boolean sharedTickets) {
+    public void setSharedTickets(Boolean sharedTickets) {
         this.sharedTickets = sharedTickets;
     }
 
