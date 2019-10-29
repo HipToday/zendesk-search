@@ -36,10 +36,12 @@ import com.google.gson.reflect.TypeToken;
 import com.nicktempleton.zendesk.search.model.Organization;
 
 public class ResourceLoader {
+    public static final String RESOURCE_ORGANIZATIONS = "organizations.json";
+
     private static final Map<String, Type> RESOURCE_TYPE_MAP = new HashMap<>();
 
     static {
-        RESOURCE_TYPE_MAP.put("oganizations.json", new TypeToken<List<Organization>>(){}.getType());
+        RESOURCE_TYPE_MAP.put(RESOURCE_ORGANIZATIONS, new TypeToken<List<Organization>>(){}.getType());
     }
 
     public static <T> List<T> loadFromJSONResource(String resource) {

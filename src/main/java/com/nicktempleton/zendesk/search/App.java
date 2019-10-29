@@ -40,7 +40,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Welcome to Zendesk Search!");
 
-        organizations = ResourceLoader.loadFromJSONResource("organizations.json");
+        organizations = ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
 
         System.out.println("Organization count: " + organizations.size());
         for (Organization org : organizations) {
