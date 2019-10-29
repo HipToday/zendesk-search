@@ -19,32 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.nicktempleton.zendesk.search;
+package com.nicktempleton.zendesk.search.util;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.nicktempleton.zendesk.search.model.Organization;
-import com.nicktempleton.zendesk.search.util.ResourceLoader;
 
-/**
- * Main application class
- */
-public class App {
-    private static List<Organization> organizations;
+public class ResourceLoader {
+    private static final Map<String, Type> RESOURCE_TYPE_MAP = new HashMap<>();
 
-    /**
-     * Application execution begins here.
-     * 
-     * @param args Command-line arguments
-     */
-    public static void main(String[] args) {
-        System.out.println("Welcome to Zendesk Search!");
+    static {
+        RESOURCE_TYPE_MAP.put("oganizations.json", new TypeToken<List<Organization>>(){}.getType());
+    }
 
-        organizations = ResourceLoader.loadFromJSONResource("organizations.json");
+    public static <T> List<T> loadFromJSONResource(String resource) {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream(resource);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        System.out.println("Organization count: " + organizations.size());
-        for (Organization org : organizations) {
-            System.out.println(org);
-        }
+        Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
+
+        return gson.fromJson(br, RESOURCE_TYPE_MAP.get(resource));
     }
 }
