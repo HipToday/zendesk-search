@@ -34,14 +34,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.nicktempleton.zendesk.search.model.Organization;
+import com.nicktempleton.zendesk.search.model.Ticket;
+import com.nicktempleton.zendesk.search.model.User;
 
 public class ResourceLoader {
     public static final String RESOURCE_ORGANIZATIONS = "organizations.json";
+    public static final String RESOURCE_TICKETS = "tickets.json";
+    public static final String RESOURCE_USERS = "users.json";
 
     private static final Map<String, Type> RESOURCE_TYPE_MAP = new HashMap<>();
 
     static {
         RESOURCE_TYPE_MAP.put(RESOURCE_ORGANIZATIONS, new TypeToken<List<Organization>>(){}.getType());
+        RESOURCE_TYPE_MAP.put(RESOURCE_TICKETS, new TypeToken<List<Ticket>>(){}.getType());
+        RESOURCE_TYPE_MAP.put(RESOURCE_USERS, new TypeToken<List<User>>(){}.getType());
     }
 
     public static <T> List<T> loadFromJSONResource(String resource) {

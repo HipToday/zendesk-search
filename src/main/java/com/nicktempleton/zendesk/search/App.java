@@ -24,14 +24,14 @@ package com.nicktempleton.zendesk.search;
 import java.util.List;
 
 import com.nicktempleton.zendesk.search.model.Organization;
+import com.nicktempleton.zendesk.search.model.Ticket;
+import com.nicktempleton.zendesk.search.model.User;
 import com.nicktempleton.zendesk.search.util.ResourceLoader;
 
 /**
  * Main application class
  */
 public class App {
-    private static List<Organization> organizations;
-
     /**
      * Application execution begins here.
      * 
@@ -40,11 +40,15 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Welcome to Zendesk Search!");
 
-        organizations = ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
+        List<Organization> organizations =
+            ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
+        List<Ticket> tickets =
+            ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_TICKETS);
+        List<User> users =
+            ResourceLoader.loadFromJSONResource(ResourceLoader.RESOURCE_USERS);
 
         System.out.println("Organization count: " + organizations.size());
-        for (Organization org : organizations) {
-            System.out.println(org);
-        }
+        System.out.println("Ticket count: " + tickets.size());
+        System.out.println("User count: " + users.size());
     }
 }
