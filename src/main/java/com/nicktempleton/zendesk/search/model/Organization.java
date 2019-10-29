@@ -22,20 +22,21 @@
 package com.nicktempleton.zendesk.search.model;
 
 import java.net.URL;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Organization model object.
  */
 public class Organization {
-    private String id;
+    @SerializedName("_id") private String id;
     private URL url;
     private UUID externalId;
     private String name;
     private List<String> domainNames;
-    private ZonedDateTime createdAt;
+    private String createdAt;
     private String details;
     private boolean sharedTickets;
     private List<String> tags;
@@ -80,11 +81,11 @@ public class Organization {
         this.domainNames = domainNames;
     }
 
-    public ZonedDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return this.createdAt;
     }
 
-    public void setCreatedAt(ZonedDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -114,5 +115,20 @@ public class Organization {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", url='" + getUrl() + "'" +
+            ", externalId='" + getExternalId() + "'" +
+            ", name='" + getName() + "'" +
+            ", domainNames='" + getDomainNames() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", details='" + getDetails() + "'" +
+            ", sharedTickets='" + isSharedTickets() + "'" +
+            ", tags='" + getTags() + "'" +
+            "}";
     }
 }

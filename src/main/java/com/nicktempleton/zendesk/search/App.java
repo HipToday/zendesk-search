@@ -21,14 +21,38 @@
  */
 package com.nicktempleton.zendesk.search;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.List;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.nicktempleton.zendesk.search.model.Organization;
+
 /**
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+public class App {
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream("organizations.json");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
+        Type organizationListType = new TypeToken<List<Organization>>(){}.getType();
+        List<Organization> organizations = gson.fromJson(br, organizationListType);
+
+        System.out.println("Organization count: " + organizations.size());
+        for (Organization org : organizations) {
+            System.out.println(org);
+        }
     }
 }
