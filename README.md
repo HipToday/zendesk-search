@@ -6,8 +6,8 @@ A Zendesk Coding Challenge
 2. [Download](https://maven.apache.org/download.cgi) and [install](https://maven.apache.org/install.html) Apache Maven. Make sure the Maven `bin` directory is added to your `PATH` environment variable.
 3. Run the following commands in the project root directory:
 
-         mvn package
-         java -cp target/zendesk-search-1.0-SNAPSHOT.jar com.nicktempleton.zendesk.search.App
+         mvn test compile assembly:single
+         java -cp target/zendesk-search-1.0-SNAPSHOT-jar-with-dependencies.jar com.nicktempleton.zendesk.search.App
 
 ## OVERVIEW
 Using the provided data ([tickets.json](./src/main/resources/tickets.json) and [users.json](./src/main/resources/users.json) and [organizations.json](./src/main/resources/organizations.json)) write
