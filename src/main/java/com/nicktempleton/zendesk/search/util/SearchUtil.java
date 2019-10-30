@@ -33,6 +33,10 @@ public class SearchUtil {
     public static List<Map<String, Object>> search(List<Map<String, Object>> data, String searchField, String searchValue) {
         List<Map<String, Object>> results = new ArrayList<>();
 
+        if (null == data) {
+            return results;
+        }
+
         for (Map<String, Object> listItem : data) {
             Object fieldValue = listItem.get(searchField);
 
@@ -51,9 +55,9 @@ public class SearchUtil {
                 } catch (NumberFormatException nfe) {
                     // move on, the input wasn't a number
                 }
-            } else if (fieldValue instanceof ArrayList) {
+            } else if (fieldValue instanceof List) {
                 // arrays are assumed to only contain strings
-                if (((ArrayList<String>)fieldValue).contains(searchValue)) {
+                if (((List<String>)fieldValue).contains(searchValue)) {
                     results.add(listItem);
                 }
             } else if (fieldValue instanceof Object) {
@@ -69,6 +73,11 @@ public class SearchUtil {
 
     public static Set<String> searchableFields(List<Map<String, Object>> data) {
         Set<String> searchableFields = new TreeSet<>();
+
+        if (null == data) {
+            return searchableFields;
+        }
+
         for (Map<String, Object> org : data) {
             searchableFields.addAll(org.keySet());
         }
