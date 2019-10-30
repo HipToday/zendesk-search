@@ -44,6 +44,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println();
         System.out.println("Welcome to Zendesk Search!");
+        System.out.println("Press CTRL+C to quit at any time.");
 
         List<Map<String, Object>> organizations =
             ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
@@ -60,7 +61,7 @@ public class App {
             String input;
             do {
                 System.out.println();
-                System.out.println("Please select an option:");
+                System.out.println("Please enter an option:");
                 System.out.println(INDENT + "1) Search Organizations");
                 System.out.println(INDENT + "2) Search Tickets");
                 System.out.println(INDENT + "3) Search Users");
