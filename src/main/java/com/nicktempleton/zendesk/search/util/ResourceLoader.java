@@ -58,10 +58,7 @@ public class ResourceLoader {
             InputStream is = classloader.getResourceAsStream(resource);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
         ) {
-            Gson gson = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create();
-
+            Gson gson = new Gson();
             Type listType = new TypeToken<List<Map<String, Object>>>(){}.getType();
             data = gson.fromJson(br, listType);
         } catch (NullPointerException npe) {
