@@ -58,7 +58,7 @@ public class App {
         Set<String> userFields = SearchUtil.searchableFields(users);
 
         try (Scanner scanner = new Scanner(System.in)) {
-            String input;
+            boolean quit = false;
             do {
                 System.out.println();
                 System.out.println("Please enter an option:");
@@ -67,28 +67,34 @@ public class App {
                 System.out.println(INDENT + "3) Search Users");
                 System.out.println(INDENT + "4) Quit");
                 System.out.print(PROMPT);
-                input = scanner.nextLine().trim();
-                if ("1".equals(input)) {
-                    String searchField = promptForSearchableField(organizationFields, scanner);
-                    String searchValue = promptForSearchValue(scanner);
-                    List<Map<String, Object>> results =
-                        SearchUtil.search(organizations, searchField, searchValue);
-                    printResults(results);
-                } else if ("2".equals(input)) {
-                    String searchField = promptForSearchableField(ticketFields, scanner);
-                    String searchValue = promptForSearchValue(scanner);
-                    List<Map<String, Object>> results =
-                        SearchUtil.search(tickets, searchField, searchValue);
-                    printResults(results);
-                } else if ("3".equals(input)) {
-                    String searchField = promptForSearchableField(userFields, scanner);
-                    String searchValue = promptForSearchValue(scanner);
-                    List<Map<String, Object>> results =
-                        SearchUtil.search(users, searchField, searchValue);
-                    printResults(results);
+                String menuOption = scanner.nextLine().trim();
+
+                switch (menuOption) {
+                    case "1":
+                        search(organizations, organizationFields, scanner);
+                        break;
+                    case "2":
+                        search(tickets, ticketFields, scanner);
+                        break;
+                    case "3":
+                        search(users, userFields, scanner);
+                        break;
+                    case "4":
+                        quit = true;
+                        break;
+                    default:
+                        // show the menu again
                 }
-            } while (!"4".equals(input));
+            } while (!quit);
         }
+    }
+
+    private static void search(List<Map<String, Object>> data, Set<String> dataFields, Scanner scanner) {
+        String searchField = promptForSearchableField(dataFields, scanner);
+        String searchValue = promptForSearchValue(scanner);
+        List<Map<String, Object>> results =
+            SearchUtil.search(data, searchField, searchValue);
+        printResults(results);
     }
 
     private static String promptForSearchableField(Set<String> searchableFields, Scanner scanner) {
