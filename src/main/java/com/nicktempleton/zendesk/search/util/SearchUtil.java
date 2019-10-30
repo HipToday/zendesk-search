@@ -29,6 +29,18 @@ import java.util.TreeSet;
 
 public class SearchUtil {
 
+    /**
+     * Search the given list of data for items that have the given search field
+     * and it's value matches (or contains in the case of lists) the given
+     * search value.
+     * 
+     * @param data List of data items (maps) to search, the keys of the maps
+     *             correspond to the search field
+     * @param searchField Field/key within the maps to match upon
+     * @param searchValue Value to look for in the search field
+     * @return List of data items that contain a field with a name of the
+     *         search field and have a value that matches the search value
+     */
     @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> search(List<Map<String, Object>> data, String searchField, String searchValue) {
         List<Map<String, Object>> results = new ArrayList<>();
@@ -71,6 +83,12 @@ public class SearchUtil {
         return results;
     }
 
+    /**
+     * Get a set of all the possible searchable fields from the given data.
+     * 
+     * @param data List of data items that have searchable fields/keys
+     * @return a set of all the possible searchable fields in the data
+     */
     public static Set<String> searchableFields(List<Map<String, Object>> data) {
         Set<String> searchableFields = new TreeSet<>();
 
