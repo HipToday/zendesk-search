@@ -22,6 +22,9 @@
 package com.nicktempleton.zendesk.search;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.nicktempleton.zendesk.search.model.Organization;
 import com.nicktempleton.zendesk.search.model.Ticket;
@@ -40,11 +43,11 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Welcome to Zendesk Search!");
 
-        List<Organization> organizations =
+        List<Map<String, Object>> organizations =
             ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
-        List<Ticket> tickets =
+        List<Map<String, Object>> tickets =
             ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_TICKETS);
-        List<User> users =
+        List<Map<String, Object>> users =
             ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_USERS);
 
         System.out.println("Organization count: " + organizations.size());

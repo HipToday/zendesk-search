@@ -35,33 +35,24 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nicktempleton.zendesk.search.model.Organization;
-import com.nicktempleton.zendesk.search.model.Ticket;
-import com.nicktempleton.zendesk.search.model.User;
 
 public class ResourceLoader {
     public static final String RESOURCE_ORGANIZATIONS = "organizations.json";
     public static final String RESOURCE_TICKETS = "tickets.json";
     public static final String RESOURCE_USERS = "users.json";
 
-    private static final Map<String, Type> RESOURCE_TYPE_MAP = new HashMap<>();
-
-    static {
-        RESOURCE_TYPE_MAP.put(RESOURCE_ORGANIZATIONS, new TypeToken<List<Organization>>(){}.getType());
-        RESOURCE_TYPE_MAP.put(RESOURCE_TICKETS, new TypeToken<List<Ticket>>(){}.getType());
-        RESOURCE_TYPE_MAP.put(RESOURCE_USERS, new TypeToken<List<User>>(){}.getType());
-    }
-
     /**
      * Deserialize the JSON in the given resource (expected to be a file in the
-     * resources directory) to a list of appropriate objects.
+     * resources directory) to a list of maps where the map keys are the field
+     * names and the values are appropriate objects as determined by Gson.
      * 
-     * @param <T>
      * @param resource Resource JSON file to deserialize
-     * @return A list of objects read from the JSON file
+     * @return A list of maps read from the JSON file
+     * @throws NullPointerException if the given resource cannot be found
+     * @throws JsonSyntaxException if the given resource is not valid JSON
      */
-    public static <T> List<T> loadFromJsonResource(String resource) {
-        List<T> data = null;
+    public static List<Map<String, Object>> loadFromJsonResource(String resource) {
+        List<Map<String, Object>> data = null;
 
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try (
@@ -72,7 +63,8 @@ public class ResourceLoader {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
-            data = gson.fromJson(br, RESOURCE_TYPE_MAP.get(resource));
+            Type listType = new TypeToken<List<Map<String, Object>>>(){}.getType();
+            data = gson.fromJson(br, listType);
         } catch (NullPointerException npe) {
             throw new NullPointerException("Unable to open resource: " + resource);
         } catch (JsonSyntaxException jse) {
