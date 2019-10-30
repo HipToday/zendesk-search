@@ -26,9 +26,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import com.nicktempleton.zendesk.search.model.Organization;
-import com.nicktempleton.zendesk.search.model.Ticket;
-import com.nicktempleton.zendesk.search.model.User;
 import com.nicktempleton.zendesk.search.util.ResourceLoader;
 
 /**
