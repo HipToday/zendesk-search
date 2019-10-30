@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public class ResourceLoader {
      * @throws JsonSyntaxException if the given resource is not valid JSON
      */
     public static List<Map<String, Object>> loadFromJsonResource(String resource) {
-        List<Map<String, Object>> data = null;
+        List<Map<String, Object>> data = new ArrayList<>();
 
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try (
@@ -60,11 +61,14 @@ public class ResourceLoader {
             Type listType = new TypeToken<List<Map<String, Object>>>(){}.getType();
             data = gson.fromJson(br, listType);
         } catch (NullPointerException npe) {
-            throw new NullPointerException("Unable to open resource: " + resource);
+            System.err.println("Unable to open resource: " + resource);
+            npe.printStackTrace();
         } catch (JsonSyntaxException jse) {
-            throw new JsonSyntaxException("Invalid JSON in resource: " + resource, jse);
+            System.err.println("Invalid JSON in resource: " + resource);
+            jse.printStackTrace();
         } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
+            System.err.println("Something really went wrong loading resource: " + resource);
+            ioe.printStackTrace();
         }
 
         return data;

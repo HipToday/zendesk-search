@@ -91,6 +91,12 @@ public class App {
     }
 
     private static void search(List<Map<String, Object>> data, Set<String> dataFields, Scanner scanner) {
+        if (data.isEmpty() || dataFields.isEmpty()) {
+            System.out.println();
+            System.out.println("Nothing to search!");
+            return;
+        }
+
         String searchField = promptForSearchableField(dataFields, scanner);
         String searchValue = promptForSearchValue(scanner);
         List<Map<String, Object>> results =

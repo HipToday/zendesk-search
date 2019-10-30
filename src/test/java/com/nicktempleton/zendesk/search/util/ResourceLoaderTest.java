@@ -23,8 +23,6 @@ package com.nicktempleton.zendesk.search.util;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.gson.JsonSyntaxException;
-
 import org.junit.Test;
 
 public class ResourceLoaderTest {
@@ -34,13 +32,13 @@ public class ResourceLoaderTest {
         assertEquals(200, ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_TICKETS).size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNonexistentResource() {
-        ResourceLoader.loadFromJsonResource("nonexistent_resource");
+        assertEquals(0, ResourceLoader.loadFromJsonResource("nonexistent_resource").size());
     }
 
-    @Test(expected = JsonSyntaxException.class)
+    @Test
     public void testInvalidJsonResource() {
-        ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
+        assertEquals(0, ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS).size());
     }
 }
