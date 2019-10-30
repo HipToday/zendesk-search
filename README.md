@@ -9,6 +9,8 @@ A Zendesk Coding Challenge
          mvn test compile assembly:single
          java -cp target/zendesk-search-1.0-SNAPSHOT-jar-with-dependencies.jar com.nicktempleton.zendesk.search.App
 
+**NOTE** - Changes to the data files in `./src/main/resources` will require step 3 to be run again fully, as the resource files need to be repackaged in the JAR.
+
 ## OVERVIEW
 Using the provided data ([tickets.json](./src/main/resources/tickets.json) and [users.json](./src/main/resources/users.json) and [organizations.json](./src/main/resources/organizations.json)) write
 a simple command line application (or a locally runnable web-app) to search the data and return
