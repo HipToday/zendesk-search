@@ -22,6 +22,7 @@
 package com.nicktempleton.zendesk.search.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -84,5 +85,12 @@ public class SearchUtilTest {
         assertEquals(0, SearchUtil.search(null, "null", "").size());
         assertEquals(6, SearchUtil.search(data, null, "").size());
         assertEquals(0, SearchUtil.search(data, "null", null).size());
+    }
+
+    @Test
+    public void testSearchableFields() {
+        assertEquals(0, SearchUtil.searchableFields(null).size());
+        assertEquals(5, SearchUtil.searchableFields(data).size());
+        assertTrue(SearchUtil.searchableFields(data).contains("stringList"));
     }
 }
