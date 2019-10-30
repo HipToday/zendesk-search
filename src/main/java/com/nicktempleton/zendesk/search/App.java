@@ -33,12 +33,16 @@ import com.nicktempleton.zendesk.search.util.SearchUtil;
  * Main application class
  */
 public class App {
+    private static final String INDENT = "    ";
+    private static final String PROMPT = "> ";
+
     /**
      * Application execution begins here.
      * 
      * @param args Command-line arguments
      */
     public static void main(String[] args) {
+        System.out.println();
         System.out.println("Welcome to Zendesk Search!");
 
         List<Map<String, Object>> organizations =
@@ -51,35 +55,36 @@ public class App {
         Set<String> organizationFields = SearchUtil.searchableFields(organizations);
         Set<String> ticketFields = SearchUtil.searchableFields(tickets);
         Set<String> userFields = SearchUtil.searchableFields(users);
-    
-        System.out.println();
-        System.out.println("Organization count: " + organizations.size());
-        System.out.println("Ticket count: " + tickets.size());
-        System.out.println("User count: " + users.size());
 
         try (Scanner scanner = new Scanner(System.in)) {
             String input;
             do {
                 System.out.println();
                 System.out.println("Please select an option:");
-                System.out.println("1 - Search Organizations");
-                System.out.println("2 - Search Tickets");
-                System.out.println("3 - Search Users");
-                System.out.println("4 - Quit");
-                System.out.print("> ");
+                System.out.println(INDENT + "1) Search Organizations");
+                System.out.println(INDENT + "2) Search Tickets");
+                System.out.println(INDENT + "3) Search Users");
+                System.out.println(INDENT + "4) Quit");
+                System.out.print(PROMPT);
                 input = scanner.nextLine().trim();
                 if ("1".equals(input)) {
                     String searchField = promptForSearchableField(organizationFields, scanner);
                     String searchValue = promptForSearchValue(scanner);
-                    SearchUtil.search(organizations, searchField, searchValue);
+                    List<Map<String, Object>> results =
+                        SearchUtil.search(organizations, searchField, searchValue);
+                    printResults(results);
                 } else if ("2".equals(input)) {
                     String searchField = promptForSearchableField(ticketFields, scanner);
                     String searchValue = promptForSearchValue(scanner);
-                    SearchUtil.search(tickets, searchField, searchValue);
+                    List<Map<String, Object>> results =
+                        SearchUtil.search(tickets, searchField, searchValue);
+                    printResults(results);
                 } else if ("3".equals(input)) {
                     String searchField = promptForSearchableField(userFields, scanner);
                     String searchValue = promptForSearchValue(scanner);
-                    SearchUtil.search(users, searchField, searchValue);
+                    List<Map<String, Object>> results =
+                        SearchUtil.search(users, searchField, searchValue);
+                    printResults(results);
                 }
             } while (!"4".equals(input));
         }
@@ -90,9 +95,12 @@ public class App {
         do {
             System.out.println();
             System.out.println("Searchable fields:");
-            searchableFields.forEach(System.out::println);
+            for (String field : searchableFields) {
+                System.out.println(INDENT + field);
+            }
+            System.out.println();
             System.out.println("Enter desired field to search:");
-            System.out.print("> ");
+            System.out.print(PROMPT);
             searchableField = scanner.nextLine().trim();
         } while (!searchableFields.contains(searchableField));
 
@@ -102,7 +110,28 @@ public class App {
     private static String promptForSearchValue(Scanner scanner) {
         System.out.println();
         System.out.println("Enter search value:");
-        System.out.print("> ");
+        System.out.print(PROMPT);
         return scanner.nextLine().trim();
+    }
+
+    private static void printResults(List<Map<String, Object>> results) {
+        System.out.println();
+        System.out.println("Results:");
+
+        for (Map<String, Object> listItem : results) {
+            System.out.println();
+            for (Map.Entry<String, Object> entry : listItem.entrySet()) {
+                Object value = entry.getValue();
+                if (value instanceof Double) {
+                    // Gson gives us doubles, but let's display integers
+                    System.out.printf("%-16s %.0f\n", entry.getKey(), value);
+                } else {
+                    System.out.printf("%-16s %s\n", entry.getKey(), value);
+                }
+            }
+        }
+
+        System.out.println();
+        System.out.println("Result count: " + results.size());
     }
 }

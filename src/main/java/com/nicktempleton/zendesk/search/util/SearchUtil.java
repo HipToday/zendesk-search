@@ -22,10 +22,10 @@
 package com.nicktempleton.zendesk.search.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class SearchUtil {
 
@@ -35,7 +35,6 @@ public class SearchUtil {
 
         for (Map<String, Object> listItem : data) {
             Object fieldValue = listItem.get(searchField);
-            System.out.println(null != fieldValue ? fieldValue.getClass() : "null");
 
             // Let's consider a null value to simply be empty
             if (null == fieldValue) {
@@ -61,12 +60,11 @@ public class SearchUtil {
             }
         }
 
-        results.forEach(System.out::println);
         return results;
     }
 
     public static Set<String> searchableFields(List<Map<String, Object>> data) {
-        Set<String> searchableFields = new HashSet<>();
+        Set<String> searchableFields = new TreeSet<>();
         for (Map<String, Object> org : data) {
             searchableFields.addAll(org.keySet());
         }
