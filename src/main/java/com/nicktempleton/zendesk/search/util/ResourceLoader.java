@@ -46,8 +46,6 @@ public class ResourceLoader {
      * 
      * @param resource Resource JSON file to deserialize
      * @return A list of maps read from the JSON file
-     * @throws NullPointerException if the given resource cannot be found
-     * @throws JsonSyntaxException if the given resource is not valid JSON
      */
     public static List<Map<String, Object>> loadFromJsonResource(String resource) {
         List<Map<String, Object>> data = new ArrayList<>();
