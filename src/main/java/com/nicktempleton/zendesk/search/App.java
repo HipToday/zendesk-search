@@ -49,6 +49,11 @@ public class App {
         List<Map<String, Object>> users =
             ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_USERS);
 
+        Set<String> organizationFields = searchableFields(organizations);
+        Set<String> ticketFields = searchableFields(tickets);
+        Set<String> userFields = searchableFields(users);
+    
+        System.out.println();
         System.out.println("Organization count: " + organizations.size());
         System.out.println("Ticket count: " + tickets.size());
         System.out.println("User count: " + users.size());
@@ -56,80 +61,93 @@ public class App {
         try (Scanner scanner = new Scanner(System.in)) {
             String input;
             do {
+                System.out.println();
                 System.out.println("Please select an option:");
                 System.out.println("1 - Search Organizations");
                 System.out.println("2 - Search Tickets");
                 System.out.println("3 - Search Users");
                 System.out.println("4 - Quit");
                 System.out.print("> ");
-                input = scanner.next();
+                input = scanner.nextLine();
                 if ("1".equals(input)) {
-                    search(organizations, scanner);
+                    String searchField = promptForSearchableField(organizationFields, scanner);
+                    String searchValue = promptForSearchValue(scanner);
+                    search(organizations, searchField, searchValue);
                 } else if ("2".equals(input)) {
-                    search(tickets, scanner);
+                    String searchField = promptForSearchableField(ticketFields, scanner);
+                    String searchValue = promptForSearchValue(scanner);
+                    search(tickets, searchField, searchValue);
                 } else if ("3".equals(input)) {
-                    search(users, scanner);
+                    String searchField = promptForSearchableField(userFields, scanner);
+                    String searchValue = promptForSearchValue(scanner);
+                    search(users, searchField, searchValue);
                 }
             } while (!"4".equals(input));
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static void search(List<Map<String, Object>> data, Scanner scanner) {
-        String searchField = promptForSearchableField(data, scanner);
-        if (data.get(0).keySet().contains(searchField)) {
-            String searchValue = promptForSearchValue(scanner);
-            List<Map<String, Object>> results = new ArrayList<>();
-            for (Map<String, Object> listItem : data) {
-                Object fieldValue = listItem.get(searchField);
-                System.out.println(null != fieldValue ? fieldValue.getClass() : "null");
-                if (fieldValue instanceof Double) {
-                    try {
-                        if (fieldValue.equals(Double.valueOf(searchValue))) {
-                            results.add(listItem);
-                        }
-                    } catch (NumberFormatException nfe) {
-                        // move on
-                    }
-                } else if (fieldValue instanceof ArrayList) {
-                    if (((ArrayList<String>)fieldValue).contains(searchValue)) {
+    private static List<Map<String, Object>> search(List<Map<String, Object>> data, String searchField, String searchValue) {
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        for (Map<String, Object> listItem : data) {
+            Object fieldValue = listItem.get(searchField);
+            System.out.println(null != fieldValue ? fieldValue.getClass() : "null");
+
+            // Let's consider a null value to simply be empty
+            if (null == fieldValue) {
+                fieldValue = "";
+            }
+
+            if (fieldValue instanceof Double) {
+                try {
+                    if (fieldValue.equals(Double.valueOf(searchValue))) {
                         results.add(listItem);
                     }
-                } else if (fieldValue instanceof Object) {
-                    if (fieldValue.toString().equals(searchValue)) {
-                        results.add(listItem);
-                    }
+                } catch (NumberFormatException nfe) {
+                    // move on
+                }
+            } else if (fieldValue instanceof ArrayList) {
+                if (((ArrayList<String>)fieldValue).contains(searchValue)) {
+                    results.add(listItem);
+                }
+            } else if (fieldValue instanceof Object) {
+                if (fieldValue.toString().equals(searchValue)) {
+                    results.add(listItem);
                 }
             }
-            results.forEach(System.out::println);
-//             List<Map<String, Object>> result = data.stream()
-//                 .filter(org -> null != org.get(searchField))
-//                 .filter(Predicates.isDouble(searchField)
-//                     .and(org -> org.get(searchField).equals(Double.valueOf(searchValue)))
-//                     .or(Predicates.isDouble(searchField).negate()
-//                         .and(org -> org.get(searchField).toString().contains(searchValue))))
-// //                .filter(org -> org.get(searchField).toString().contains(searchValue))
-//                 .collect(Collectors.toList());
-//             result.forEach(System.out::println);
         }
+
+        results.forEach(System.out::println);
+        return results;
     }
 
-    private static String promptForSearchableField(List<Map<String, Object>> data, Scanner scanner) {
+    private static Set<String> searchableFields(List<Map<String, Object>> data) {
         Set<String> searchableFields = new HashSet<>();
         for (Map<String, Object> org : data) {
             searchableFields.addAll(org.keySet());
         }
+        return searchableFields;
+    }
 
-        System.out.println("Searchable fields:");
-        searchableFields.forEach(System.out::println);
-        System.out.println("Enter desired field to search:");
-        System.out.print("> ");
-        return scanner.next();
+    private static String promptForSearchableField(Set<String> searchableFields, Scanner scanner) {
+        String searchableField;
+        do {
+            System.out.println();
+            System.out.println("Searchable fields:");
+            searchableFields.forEach(System.out::println);
+            System.out.println("Enter desired field to search:");
+            System.out.print("> ");
+            searchableField = scanner.nextLine();
+        } while (!searchableFields.contains(searchableField));
+
+        return searchableField;
     }
 
     private static String promptForSearchValue(Scanner scanner) {
+        System.out.println();
         System.out.println("Enter search value:");
         System.out.print("> ");
-        return scanner.next();
+        return scanner.nextLine();
     }
 }
