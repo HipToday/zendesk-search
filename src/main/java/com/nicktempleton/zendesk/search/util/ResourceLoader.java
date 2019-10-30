@@ -52,6 +52,14 @@ public class ResourceLoader {
         RESOURCE_TYPE_MAP.put(RESOURCE_USERS, new TypeToken<List<User>>(){}.getType());
     }
 
+    /**
+     * Deserialize the JSON in the given resource (expected to be a file in the
+     * resources directory) to a list of appropriate objects.
+     * 
+     * @param <T>
+     * @param resource Resource JSON file to deserialize
+     * @return A list of objects read from the JSON file
+     */
     public static <T> List<T> loadFromJsonResource(String resource) {
         List<T> data = null;
 
