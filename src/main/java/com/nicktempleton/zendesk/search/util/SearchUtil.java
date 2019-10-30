@@ -42,18 +42,22 @@ public class SearchUtil {
             }
 
             if (fieldValue instanceof Double) {
+                // Gson treats numbers as doubles, but we want to be able to
+                // enter integers, so we do some conversion of the input
                 try {
                     if (fieldValue.equals(Double.valueOf(searchValue))) {
                         results.add(listItem);
                     }
                 } catch (NumberFormatException nfe) {
-                    // move on
+                    // move on, the input wasn't a number
                 }
             } else if (fieldValue instanceof ArrayList) {
+                // arrays are assumed to only contain strings
                 if (((ArrayList<String>)fieldValue).contains(searchValue)) {
                     results.add(listItem);
                 }
             } else if (fieldValue instanceof Object) {
+                // most fields can simply be converted to a string and compared
                 if (fieldValue.toString().equals(searchValue)) {
                     results.add(listItem);
                 }
