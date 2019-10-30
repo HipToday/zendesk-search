@@ -83,8 +83,9 @@ public class App {
                         quit = true;
                         break;
                     default:
-                        // show the menu again
-                }
+                        System.out.println();
+                        System.out.println("ERROR: Invalid option, try again");
+                    }
             } while (!quit);
         }
     }
@@ -99,6 +100,8 @@ public class App {
 
     private static String promptForSearchableField(Set<String> searchableFields, Scanner scanner) {
         String searchableField;
+
+        boolean validField = false;
         do {
             System.out.println();
             System.out.println("Searchable fields:");
@@ -109,7 +112,13 @@ public class App {
             System.out.println("Enter desired field to search:");
             System.out.print(PROMPT);
             searchableField = scanner.nextLine().trim();
-        } while (!searchableFields.contains(searchableField));
+
+            validField = searchableFields.contains(searchableField);
+            if (!validField) {
+                System.out.println();
+                System.out.println("ERROR: Invalid field, try again");
+            }
+        } while (!validField);
 
         return searchableField;
     }
