@@ -67,7 +67,7 @@ public class App {
                 System.out.println("3 - Search Users");
                 System.out.println("4 - Quit");
                 System.out.print("> ");
-                input = scanner.nextLine();
+                input = scanner.nextLine().trim();
                 if ("1".equals(input)) {
                     String searchField = promptForSearchableField(organizationFields, scanner);
                     String searchValue = promptForSearchValue(scanner);
@@ -93,7 +93,7 @@ public class App {
             searchableFields.forEach(System.out::println);
             System.out.println("Enter desired field to search:");
             System.out.print("> ");
-            searchableField = scanner.nextLine();
+            searchableField = scanner.nextLine().trim();
         } while (!searchableFields.contains(searchableField));
 
         return searchableField;
@@ -103,6 +103,6 @@ public class App {
         System.out.println();
         System.out.println("Enter search value:");
         System.out.print("> ");
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 }
