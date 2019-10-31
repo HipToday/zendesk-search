@@ -24,10 +24,8 @@ package com.nicktempleton.zendesk.search;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
-import com.nicktempleton.zendesk.search.util.ResourceLoader;
-import com.nicktempleton.zendesk.search.util.SearchUtil;
+import com.nicktempleton.zendesk.search.model.SearchData;
 
 /**
  * Main application class
@@ -46,16 +44,9 @@ public class App {
         System.out.println("Welcome to Zendesk Search!");
         System.out.println("Press CTRL+C to quit at any time.");
 
-        List<Map<String, Object>> organizations =
-            ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS);
-        List<Map<String, Object>> tickets =
-            ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_TICKETS);
-        List<Map<String, Object>> users =
-            ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_USERS);
-
-        Set<String> organizationFields = SearchUtil.searchableFields(organizations);
-        Set<String> ticketFields = SearchUtil.searchableFields(tickets);
-        Set<String> userFields = SearchUtil.searchableFields(users);
+        SearchData organizations = new SearchData("organizations.json");
+        SearchData tickets = new SearchData("tickets.json");
+        SearchData users = new SearchData("users.json");
 
         try (Scanner scanner = new Scanner(System.in)) {
             boolean quit = false;
@@ -71,13 +62,13 @@ public class App {
 
                 switch (menuOption) {
                     case "1":
-                        search(organizations, organizationFields, scanner);
+                        search(organizations, scanner);
                         break;
                     case "2":
-                        search(tickets, ticketFields, scanner);
+                        search(tickets, scanner);
                         break;
                     case "3":
-                        search(users, userFields, scanner);
+                        search(users, scanner);
                         break;
                     case "4":
                         quit = true;
@@ -90,28 +81,28 @@ public class App {
         }
     }
 
-    private static void search(List<Map<String, Object>> data, Set<String> dataFields, Scanner scanner) {
-        if (data.isEmpty() || dataFields.isEmpty()) {
+    private static void search(SearchData data, Scanner scanner) {
+        if (!data.hasSearchableData()) {
             System.out.println();
             System.out.println("Nothing to search!");
             return;
         }
 
-        String searchField = promptForSearchableField(dataFields, scanner);
+        String searchField = promptForSearchableField(data, scanner);
         String searchValue = promptForSearchValue(scanner);
-        List<Map<String, Object>> results =
-            SearchUtil.search(data, searchField, searchValue);
+        List<Map<String, Object>> results = data.search(searchField, searchValue);
+
         printResults(results);
     }
 
-    private static String promptForSearchableField(Set<String> searchableFields, Scanner scanner) {
+    private static String promptForSearchableField(SearchData data, Scanner scanner) {
         String searchableField;
 
         boolean validField = false;
         do {
             System.out.println();
             System.out.println("Searchable fields:");
-            for (String field : searchableFields) {
+            for (String field : data.getSearchFields()) {
                 System.out.println(INDENT + field);
             }
             System.out.println();
@@ -119,7 +110,7 @@ public class App {
             System.out.print(PROMPT);
             searchableField = scanner.nextLine().trim();
 
-            validField = searchableFields.contains(searchableField);
+            validField = data.isSearchableField(searchableField);
             if (!validField) {
                 System.out.println();
                 System.out.println("ERROR: Invalid field, try again");

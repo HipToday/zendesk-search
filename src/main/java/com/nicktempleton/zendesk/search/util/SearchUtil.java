@@ -29,6 +29,10 @@ import java.util.TreeSet;
 
 public class SearchUtil {
 
+    private SearchUtil() {
+        // no need to instantiate me
+    }
+
     /**
      * Search the given list of data for items that have the given search field
      * and it's value matches (or contains in the case of lists) the given

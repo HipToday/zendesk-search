@@ -35,9 +35,10 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 public class ResourceLoader {
-    public static final String RESOURCE_ORGANIZATIONS = "organizations.json";
-    public static final String RESOURCE_TICKETS = "tickets.json";
-    public static final String RESOURCE_USERS = "users.json";
+
+    private ResourceLoader() {
+        // no need to instantiate me
+    }
 
     /**
      * Deserialize the JSON in the given resource (expected to be a file in the

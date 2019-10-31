@@ -29,7 +29,7 @@ public class ResourceLoaderTest {
 
     @Test
     public void testJsonResource() {
-        assertEquals(200, ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_TICKETS).size());
+        assertEquals(200, ResourceLoader.loadFromJsonResource("tickets.json").size());
     }
 
     @Test
@@ -39,6 +39,6 @@ public class ResourceLoaderTest {
 
     @Test
     public void testInvalidJsonResource() {
-        assertEquals(0, ResourceLoader.loadFromJsonResource(ResourceLoader.RESOURCE_ORGANIZATIONS).size());
+        assertEquals(0, ResourceLoader.loadFromJsonResource("invalid").size());
     }
 }
