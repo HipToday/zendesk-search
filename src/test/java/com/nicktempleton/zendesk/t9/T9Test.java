@@ -22,6 +22,7 @@
 package com.nicktempleton.zendesk.t9;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,6 +80,12 @@ public class T9Test {
         String[] expected = { " a", " b", " c" };
         Integer[] keys = { 0, 1, 2 };
         assertArrayEquals(expected, translate(keys));
+    }
+
+    @Test
+    public void testContainsHello() {
+        Integer[] keys = { 4, 3, 5, 5, 6 };
+        assertTrue(Arrays.asList(translate(keys)).contains("hello"));
     }
 
     String[][] LETTERS = {
