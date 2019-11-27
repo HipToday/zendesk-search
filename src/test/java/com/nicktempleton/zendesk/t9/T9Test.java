@@ -23,8 +23,8 @@ package com.nicktempleton.zendesk.t9;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
 
 import org.junit.Test;
 
@@ -88,31 +88,27 @@ public class T9Test {
     };
 
     private String[] translate(Integer[] keys) {
-        Vector<String> result = new Vector<>();
+        ArrayList<String> result = new ArrayList<>();
 
         for (int i = 0; i < keys.length; i++) {
             String[] newchars = LETTERS[keys[i]];
-
-            Vector<String> expander = new Vector<>(result);
             if (i == 0) {
-                expander.addAll(Arrays.asList((newchars)));
+                result = new ArrayList<>(Arrays.asList(newchars));
             } else {
-                for (int j = 1; j < newchars.length; j++) {
-                    expander.addAll(result);
-                }
-
+                ArrayList<String> expander = new ArrayList<>();
                 for (int j = 0; j < newchars.length; j++) {
+                    expander.addAll(result);
                     for (int k = 0; k < result.size(); k++) {
                         int index = k + (j * result.size());
                         expander.set(index, expander.get(index) + newchars[j]);
                     }
                 }
-            }
 
-            result = expander;
+                result = expander;
+            }
         }
 
         System.out.println(result);
-        return result.toArray(new String[0]);
+        return result.toArray(new String[result.size()]);
     }
 }
