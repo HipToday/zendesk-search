@@ -46,8 +46,8 @@ public class T9Test {
 
     @Test
     public void testTwoElements() {
-        String[] expected = { "aa", "ba", "ca", "ab", "bb", "cb", "ac", "bc", "cc" };
-        Integer[] keys = { 2, 2 };
+        String[] expected = { "ap", "bp", "cp", "aq", "bq", "cq", "ar", "br", "cr", "as", "bs", "cs" };
+        Integer[] keys = { 2, 7 };
         assertArrayEquals(expected, translate(keys));
     }
 
@@ -84,7 +84,14 @@ public class T9Test {
     String[][] LETTERS = {
         { " " },
         { "" },
-        { "a", "b", "c" }
+        { "a", "b", "c" },
+        { "d", "e", "f" },
+        { "g", "h", "i" },
+        { "j", "k", "l" },
+        { "m", "n", "o" },
+        { "p", "q", "r", "s" },
+        { "t", "u", "v" },
+        { "w", "x", "y", "z" }
     };
 
     private String[] translate(Integer[] keys) {
